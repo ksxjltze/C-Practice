@@ -2,20 +2,22 @@
 #include <string.h>
 #include <stdlib.h>
 
-int ExpandString(char *dst, const char* src, size_t tab_size)
+char* ExpandString(char *dst, const char* src, size_t length, size_t tab_size)
 {
     unsigned short i = 0;
     unsigned short j = i;
-    size_t length = sizeof(src);
 
     while(1)
     {
         char c = src[i];
         if (c == '\t')
         {
-            char* temp = realloc(dst, length + tab_size);
+            length += tab_size;
+            printf("New size: %zu\n", length);
+            char* temp = realloc(dst, length);
             if (temp)
             {
+                dst = temp;
                 for(unsigned short k = 0; k < tab_size; k++)
                 {
                     dst[j++] = ' ';
@@ -25,7 +27,7 @@ int ExpandString(char *dst, const char* src, size_t tab_size)
             else
             {
                 printf("ERROR REALLOCATING MEMORY\n");
-                return 0;
+                return NULL;
             }
             
         }
@@ -41,20 +43,34 @@ int ExpandString(char *dst, const char* src, size_t tab_size)
         j++;
     }
 
-    printf("Size of dst: %zo\n", length);
-    return 1;
+    printf("\nSize of dst: %zu\n", length);
+    return dst;
 }
 
 int main(void)
 {
-    char* src = "A\tB\tC\t";
-    char* dst = malloc(sizeof(src));
+    char* src = "A\tB\tC\tD\tE\tF\tG";
+    size_t length = strlen(src) + 1;
+    char* dst = malloc(strlen(src) + 1);
 
-    if(!ExpandString(dst, src, (size_t)8))
+    printf("Size of src: %zu\n", length);
+    printf("Size of dst: %zu\n", length);
+
+    printf("\n");
+    printf("Before (src): \n%s\n", src);
+    printf("\n");
+
+    dst = ExpandString(dst, src, length, (size_t)16);
+    if (!dst)
         return EXIT_FAILURE;
 
-    printf("size of dst: %zo\n\n", sizeof(dst));
-    printf("After (src): \n%s\n", src);
+    printf("\n");
+
+    printf("Size of src: %zu\n", length);
+    printf("Size of dst: %zu\n", length);
+
+    printf("\n");
+
     printf("After (dst): \n%s\n", dst);
 
     if (dst)
