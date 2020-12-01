@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 int main(void)
 {
     char arrc[] = "4.7", animals[][10] = {"lion", "elephant", "tiger", "cat"};
+    // char arrd[] = "4.7";
     char *pb = arrc;
     // animals[][10][10] = {{"lion", "elephant"}, {"tiger", "cat", "adads"}};
     char *pc = animals[0];
@@ -18,5 +20,12 @@ int main(void)
     printf("6. %zu\n", strlen(pc));
     printf("7. %zu\n", strlen(pc + 12));
     printf("8. %zu\n", strlen(++pb));
+
+    printf("Before: %zu\n", sizeof(arrc));
+    char* temp = realloc(arrc, 8);
+    if (temp)
+    {
+        printf("After: %zu\n", sizeof(arrc));
+    }
 
 }
